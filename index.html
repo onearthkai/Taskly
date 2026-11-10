@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly - Task Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+<div class="logo">
+    <img src="icon-logo.svg" alt="Taskly Logo" class="logo-icon">
+    <span class="logo-text">taskly.</span>
+</div>
+        <div class="tabs">
+            <button id="tab-dashboard" class="tab active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Dashboard
+            </button>
+            <button id="tab-archive" class="tab">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+                Archive
+            </button>
+        </div>
+        <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" placeholder="Search">
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="header">
+        <h1 id="greetingMsg">Good Morning, Mate!</h1>
+        <p id="currentDateDisplay">Wednesday, 04 November 2026</p>
+    </header>
+
+    <!-- Controls Section -->
+    <section class="controls">
+        <div class="left-controls">
+            <select id="courseFilter">
+                <option value="All courses">All courses</option>
+                <!-- Courses injected via JS -->
+            </select>
+            <button id="sortBtn" class="sort-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+                Deadline
+            </button>
+        </div>
+        <button id="openNewTaskBtn" class="primary-btn">+ New Task</button>
+    </section>
+
+    <!-- Task Container -->
+    <main id="taskContainer" class="task-grid"></main>
+
+    <!-- MODAL 1: New Task Pop-Up -->
+    <div id="newTaskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2>New Task</h2>
+                    <p>Add your task and include any supporting notes.</p>
+                </div>
+                <button class="close-btn" id="closeNewTaskBtn">✕</button>
+            </div>
+            <form id="newTaskForm">
+                <div class="form-group">
+                    <label>Task name *</label>
+                    <input type="text" id="inputTaskName" required placeholder="Hypothesis testing report">
+                </div>
+                <div class="form-group">
+                    <label>Course *</label>
+                    <select id="inputCourse" required>
+                        <!-- Courses injected via JS -->
+                        <option value="_add_new_">+ Add new course...</option>
+                    </select>
+                    <!-- Input tersembunyi untuk tambah mata kuliah baru -->
+                    <input type="text" id="inputNewCourse" class="hidden" placeholder="Type new course name...">
+                </div>
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>Deadline *</label>
+                        <input type="date" id="inputDate" required>
+                    </div>
+                    <div class="form-group half">
+                        <label>Time (WIB) *</label>
+                        <input type="time" id="inputTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Short note <span class="optional">(optional)</span></label>
+                    <textarea id="inputNote" rows="3" placeholder="To complete this task, I need to..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Task link <span class="optional">(optional)</span></label>
+                    <input type="url" id="inputTaskLink" placeholder="https://lms.kampus.ac.id/task">
+                </div>
+                <div class="form-group">
+                    <label>Card color</label>
+                    <select id="inputColor">
+                        <option value="white">White</option>
+                        <option value="#f8f9fa">Light Gray</option>
+                        <option value="#FFF4C2">Soft Yellow</option>
+                        <option value="#FFD9E0">Soft Pink</option>
+                        <option value="#D6E8FF">Soft Blue</option>
+                        <option value="#D9F2D9">Soft Green</option>
+                        <option value="#E6DDFB">Soft Lilac</option>
+                        <option value="#FFE2CC">Soft Peach</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelNewTaskBtn">Cancel</button>
+                    <button type="submit" class="primary-btn">+ Add task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Complete Task Pop-Up -->
+    <div id="completeTaskModal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <div>
+                    <h2>Complete Task</h2>
+                    <p>Add your result link now. It can't be added after the task is archived.</p>
+                </div>
+                <button class="close-btn" id="closeCompleteBtn">✕</button>
+            </div>
+            <form id="completeTaskForm">
+                <div class="form-group">
+                    <label>Result link <span class="optional">(optional, can't be added later)</span></label>
+                    <input type="url" id="inputResultLink" placeholder="Paste your result link">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" id="cancelCompleteBtn">Cancel</button>
+                    <button type="submit" class="primary-btn submit-complete-btn">Complete task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
